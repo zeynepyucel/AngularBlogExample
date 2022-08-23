@@ -1,0 +1,114 @@
+
+<div class="col">
+  <div class="card-group">
+
+    <div *ngFor="let post of posts | paginate: { itemsPerPage: 8, currentPage: p}">
+      <div  class="card">
+        <img src="assets/images/image{{post.imageId}}.jpg" alt="{{post}}" style="width:100%">
+        <p class="postTitle" >{{post.title}} </p>
+
+          <div class="buttons" >
+
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#myModal"
+              type="button"
+              class="btnV btn-outline-secondary"
+            (click)="selectedPost(post)">View</button>
+
+
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+              type="button"
+              class="btnE btn-outline-secondary"
+              (click)="selectedPost(post)">Edit
+            </button>
+
+            <span class="badge bg-secondary"> post-{{post.id}} </span>
+          </div>
+
+      </div>
+
+    </div>
+
+
+      <!-- Modal edit -->
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Edit Post</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action = register.php>
+
+                <div>
+                  <label for="title">Title </label><br>
+                  <input [(ngModel)]="selectedPostData.title" type="text" id="title" class="titleEdit" [ngModelOptions]="{standalone: true}">
+
+
+                </div>
+
+                <div>
+                  <label for="description">Description</label><br>
+                  <textarea [(ngModel)]="selectedPostData.body" type="text" id="description" class="descEdit" [ngModelOptions]="{standalone: true}"></textarea>
+                </div>
+
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="changeText()">Apply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    <!-- Modal -->
+
+      <div class="modal" id="myModal">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+
+              <h1 class="postDetails">Post Details</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+
+            <div class="modal-body">
+                  <img class="float-start image" src="assets/images/image{{postImageId}}.jpg" alt="{{posts}}" >
+              <div class="container">
+                    <div class="modalTitle">{{postTitle}}</div>
+                    <div class="modalBody">{{postBody}}</div>
+              </div>
+            </div>
+            <!--    Comments    -->
+            <h2 class="comments"> Comments </h2>
+
+            <div *ngFor="let comment of comments">
+              <div *ngFor="let user of users">
+                <div *ngIf= "comment.userId == user.id">
+                  <div *ngIf="comment.postId == postId">
+                    <div class="list-group">
+                      <div class="list-group-item" >
+                        <img class="profilePic" src="assets/images/profile/profile{{user.id}}.jpg">
+                        <span class="userName"> {{user.name}} </span>
+                        <p class="contentName" style="font-size: medium"> {{comment.name}} </p>
+                        <p class="contentBody"> {{comment.body}} </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <pagination-controls (pageChange)="p = $event" style="float:right"></pagination-controls>
+</div>
+
